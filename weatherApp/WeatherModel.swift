@@ -13,7 +13,6 @@ struct Weather: Identifiable {
     
     let temperature: Int
     let weatherCode: WeatherCode
-    let startTime: String
 }
 
 struct WeatherModel: Codable {
