@@ -7,18 +7,43 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		80B896AD28AB6ED200371E0B /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B896AC28AB6ED100371E0B /* FavoriteView.swift */; };
+		80B896AF28AB77BC00371E0B /* FavBox .swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B896AE28AB77BC00371E0B /* FavBox .swift */; };
+		80B896B428AB99A900371E0B /* dummy.json in Resources */ = {isa = PBXBuildFile; fileRef = 80B896B328AB99A900371E0B /* dummy.json */; };
 		80B8FB7F28A9352800006A47 /* weatherAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B8FB7E28A9352800006A47 /* weatherAppApp.swift */; };
 		80B8FB8128A9352800006A47 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B8FB8028A9352800006A47 /* ContentView.swift */; };
 		80B8FB8328A9352F00006A47 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80B8FB8228A9352F00006A47 /* Assets.xcassets */; };
 		80B8FB8628A9352F00006A47 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80B8FB8528A9352F00006A47 /* Preview Assets.xcassets */; };
+		80B8FB8D28A9374200006A47 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B8FB8C28A9374200006A47 /* WeatherModel.swift */; };
+		80B8FB8F28A9384400006A47 /* WeatherAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B8FB8E28A9384400006A47 /* WeatherAPIClient.swift */; };
+		80B8FBA228AAA41500006A47 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B8FBA128AAA41500006A47 /* Main.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		80B8FB9F28A9E8BD00006A47 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		80B896AC28AB6ED100371E0B /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
+		80B896AE28AB77BC00371E0B /* FavBox .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavBox .swift"; sourceTree = "<group>"; };
+		80B896B328AB99A900371E0B /* dummy.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = dummy.json; sourceTree = "<group>"; };
 		80B8FB7B28A9352800006A47 /* weatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = weatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80B8FB7E28A9352800006A47 /* weatherAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weatherAppApp.swift; sourceTree = "<group>"; };
 		80B8FB8028A9352800006A47 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		80B8FB8228A9352F00006A47 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		80B8FB8528A9352F00006A47 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		80B8FB8C28A9374200006A47 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
+		80B8FB8E28A9384400006A47 /* WeatherAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAPIClient.swift; sourceTree = "<group>"; };
+		80B8FBA128AAA41500006A47 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +77,13 @@
 			isa = PBXGroup;
 			children = (
 				80B8FB7E28A9352800006A47 /* weatherAppApp.swift */,
+				80B8FBA128AAA41500006A47 /* Main.swift */,
 				80B8FB8028A9352800006A47 /* ContentView.swift */,
+				80B896AC28AB6ED100371E0B /* FavoriteView.swift */,
+				80B896AE28AB77BC00371E0B /* FavBox .swift */,
+				80B8FB8C28A9374200006A47 /* WeatherModel.swift */,
+				80B8FB8E28A9384400006A47 /* WeatherAPIClient.swift */,
+				80B896B328AB99A900371E0B /* dummy.json */,
 				80B8FB8228A9352F00006A47 /* Assets.xcassets */,
 				80B8FB8428A9352F00006A47 /* Preview Content */,
 			);
@@ -77,6 +108,7 @@
 				80B8FB7728A9352800006A47 /* Sources */,
 				80B8FB7828A9352800006A47 /* Frameworks */,
 				80B8FB7928A9352800006A47 /* Resources */,
+				80B8FB9F28A9E8BD00006A47 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -126,6 +158,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80B8FB8628A9352F00006A47 /* Preview Assets.xcassets in Resources */,
+				80B896B428AB99A900371E0B /* dummy.json in Resources */,
 				80B8FB8328A9352F00006A47 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,7 +170,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80B896AF28AB77BC00371E0B /* FavBox .swift in Sources */,
+				80B8FBA228AAA41500006A47 /* Main.swift in Sources */,
 				80B8FB8128A9352800006A47 /* ContentView.swift in Sources */,
+				80B8FB8D28A9374200006A47 /* WeatherModel.swift in Sources */,
+				80B8FB8F28A9384400006A47 /* WeatherAPIClient.swift in Sources */,
+				80B896AD28AB6ED200371E0B /* FavoriteView.swift in Sources */,
 				80B8FB7F28A9352800006A47 /* weatherAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -269,6 +307,9 @@
 				DEVELOPMENT_ASSET_PATHS = "\"weatherApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = weatherApp/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Location required to use the app";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "location required ";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -297,6 +338,9 @@
 				DEVELOPMENT_ASSET_PATHS = "\"weatherApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = weatherApp/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Location required to use the app";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "location required ";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
