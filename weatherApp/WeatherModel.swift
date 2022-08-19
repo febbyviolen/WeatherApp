@@ -8,131 +8,72 @@
 import Foundation
 import SwiftUI
 
-struct Weather: Identifiable {
-    let id = UUID()
-    
-    let temperature: Int
-    let weatherCode: WeatherCode
+struct WeatherResponseEntity: Codable {
+    let list: [List]
+    let city: City
 }
 
-struct WeatherModel: Codable {
-    let data: WeatherData
+struct City: Codable {
+    let id: Int
+    let name: String
+    let country: String
 }
 
-struct WeatherData: Codable {
-    let timelines: [WeatherTimelines]
+struct List: Codable {
+    let weather: [WeatherEntity]
+    let main: MainWeatherEntity
+    let visibility: Int
+    let wind: WindEntity
+    let dt_txt: String
 }
 
-struct WeatherTimelines: Codable {
-    let intervals: [WeatherIntervals]
+struct WeatherEntity: Codable {
+    var id: Int
+    var main: String
+    var description: String
 }
 
-struct WeatherIntervals: Codable {
-    let startTime: String
-    let values: WeatherValue
+struct MainWeatherEntity: Codable {
+    var temp: Float
+    var feels_like: Float
+    var temp_min: Float
+    var temp_max: Float
+    var humidity: Int
 }
 
-struct WeatherValue: Codable {
-    var temperature: Double
-    var weatherCode: Int
-    
+struct WindEntity: Codable {
+    var speed: Double
 }
 
 enum WeatherCode: String, Codable {
-    case clear = "1000"
-    case mostlyClear = "1100"
-    case partlyCloudy = "1101"
-    case mostlyCloudy = "1102"
-    case cloudy = "1001"
-    case fog = "2000"
-    case lightFog = "2100"
-    case lightWind = "3000"
-    case wind = "3001"
-    case strongWind = "3002"
-    case drizzle = "4000"
-    case rain = "4001"
-    case lightRain = "4200"
-    case heavyRain = "4201"
-    case snow = "5000"
-    case flurries = "5001"
-    case lightSnow = "5100"
-    case heavySnow = "5101"
-    case freezingDrizzle = "6000"
-    case freezingRain = "6001"
-    case lightFreezingRain = "6200"
-    case heavyFreezingRain = "6201"
-    case icePellets = "7000"
-    case heavyIcePellets = "7101"
-    case lightIcePellets = "7102"
-    case thunderstorm = "8000"
+    case thunderstorm = "200"
+    case drizzle = "3"
+    case rain = "5"
+    case snow = "6"
+    case atmosphere = "7"
+    case clear = "800"
+    case clouds = "8"
+    case partly_cloudy = "801"
+    
     
     var desc: String {
         switch self {
         case .clear:
                 return "Clear"
-            case .cloudy, .mostlyCloudy:
-                return "Cloudy"
-            case .mostlyClear, .partlyCloudy:
-                return "Cloudy"
-            case .fog, .lightFog:
-                return "Fog"
-            case .lightWind:
-                return "Windy"
-            case .wind, .strongWind:
-                return "Windy"
-            case .drizzle, .lightRain:
-                return "Raining"
-            case .rain, .heavyRain:
-                return "Raining"
-            case .snow, .flurries, .lightSnow, .heavySnow:
-                return "Snowing"
-            case .freezingDrizzle:
-                return "Cold"
-            case .freezingRain, .lightFreezingRain, .heavyFreezingRain:
-                return "Raining"
-            case .icePellets:
-                return "Snowing"
-            case .heavyIcePellets:
-                return "Snowing"
-            case .lightIcePellets:
-                return "Snowing"
-            case .thunderstorm:
-                return "Thunderstorm"
-        }
-    }
-
-    var description: String {
-        switch self {
-        case .clear:
-                    return "It's very sunny!\n Don't forget your hat!"
-                case .cloudy, .mostlyCloudy:
-                    return "Cloudy today!\n Watch out for some rain"
-                case .mostlyClear, .partlyCloudy:
-                    return "Enjoy your day!"
-                case .fog, .lightFog:
-                    return "Drive safe and make sure to turn on your low-beam headlights!"
-                case .lightWind:
-                    return "Enjoy some light breeze today!"
-                case .wind, .strongWind:
-                    return "Very windy today!"
-                case .drizzle, .lightRain:
-                    return "A bit of rain,\n don't forget your umbrella!"
-                case .rain, .heavyRain:
-                    return "Rainy today,\n don't forget your umbrella!"
-                case .snow, .flurries, .lightSnow, .heavySnow:
-                    return "What a beautiful day!\n Don't forget your mittens!"
-                case .freezingDrizzle:
-                    return "So cold brrr! Keep warm!"
-                case .freezingRain, .lightFreezingRain, .heavyFreezingRain:
-                    return "Drive safe, the roads might be slippery!"
-                case .icePellets:
-                    return "Ice Pellets"
-                case .heavyIcePellets:
-                    return "Take cover!\n Heavy hail alert!"
-                case .lightIcePellets:
-                    return "Light Ice Pellets"
-                case .thunderstorm:
-                    return "Try to stay inside!\n Thunderstorm alert!"
+        case .drizzle:
+            return "Drizzle"
+        case .rain:
+            return "Rain"
+        case .snow:
+            return "Snow"
+        case .atmosphere:
+            return "Atmosphere"
+        case .clouds:
+            return "Cloudy"
+        case .thunderstorm:
+            return "Thunderstorm"
+        case .partly_cloudy:
+            return "Partly Cloudy"
         }
     }
     
@@ -140,32 +81,20 @@ enum WeatherCode: String, Codable {
         switch self {
         case .clear:
             return Image("slight_touch_happyday")
-        case .cloudy:
-            return Image("cloudy")
-        case .mostlyClear, .partlyCloudy, .mostlyCloudy:
-            return Image("partly_cloudy")
-        case .fog, .lightFog:
-            return Image("cloudy")
-        case .lightWind, .wind:
-            return Image(systemName: "wind")
-        case .strongWind:
-            return Image(systemName: "tornado")
         case .drizzle:
             return Image("rainy")
-        case .lightRain, .rain:
+        case .rain:
             return Image("rainy")
-        case .heavyRain:
-            return Image("Rain_storm")
-        case .snow, .flurries, .lightSnow, .heavySnow:
-            return Image(systemName: "snow")
-        case .freezingDrizzle:
-            return Image("snow")
-        case .freezingRain, .lightFreezingRain, .heavyFreezingRain:
-            return Image("night_storm")
-        case .icePellets, .heavyIcePellets, .lightIcePellets:
+        case .snow:
             return Image("snowy")
+        case .atmosphere:
+            return Image("cloudy")
+        case .clouds:
+            return Image("cloudy")
         case .thunderstorm:
             return Image("thnderstorm")
+        case .partly_cloudy:
+            return Image("partly_cloudy")
         }
     }
 }

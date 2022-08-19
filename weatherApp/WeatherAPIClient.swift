@@ -5,42 +5,47 @@
 //  Created by Ebbyy on 2022/08/14.
 //
 
+
 import Foundation
 import CoreLocation
-import SwiftUI
 
 final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDelegate {
-    @Published var currentWeather: Weather?
+    @Published private(set) var currentWeather: WeatherEntity?
+    @Published private(set) var weatherData: WeatherResponseEntity?
     
     private let locationManager = CLLocationManager()
     private let dateFormatter = ISO8601DateFormatter()
+    private let apiKey = "0b4bb5df77b8bc40e48691ac7b7f5e1e"
     
     override init() {
         super.init()
         locationManager.delegate = self
         requestLocation()
-        
     }
-
 
     func fetchWeather() async {
         guard let location = locationManager.location else {
             requestLocation()
+            
             return
         }
+        print(location.coordinate.latitude)
+        print(location.coordinate.longitude)
         
-        guard let url = URL(string: "https://api.openweathermap.org/data/3.0/onecall?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid={API key}") else {
-            return
+        guard let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?units=metric&lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=\(apiKey)"
+        ) else {
+            fatalError("Missing URL")
         }
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            if let weatherResponse = try? JSONDecoder().decode(WeatherModel.self, from: data),
-               let weatherValue = weatherResponse.data.timelines.first?.intervals.first?.values,
-               let weatherCode = WeatherCode(rawValue: "\(weatherValue.weatherCode)") {
+            if let weatherResponse = try? JSONDecoder().decode(WeatherResponseEntity.self, from: data),
+               let weatherValue = weatherResponse.list.first,
+               let mainValue = weatherValue.weather.first
+            {
                 DispatchQueue.main.async { [weak self] in
-                    self?.currentWeather = Weather(temperature: Int(weatherValue.temperature),
-                                                   weatherCode: weatherCode, startTime: )
+                    self?.currentWeather = WeatherEntity(id: Int(mainValue.id), main: mainValue.main, description: String(mainValue.description))
+                    self?.weatherData = weatherResponse
                 }
             }
         } catch {
