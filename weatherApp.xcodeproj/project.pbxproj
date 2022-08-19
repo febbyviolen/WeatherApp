@@ -66,10 +66,6 @@
 		80B8FB7228A9352800006A47 = {
 			isa = PBXGroup;
 			children = (
-				80B896D928AFEF5600371E0B /* ThisWeekView.swift */,
-				80B896D728AFEF1D00371E0B /* CurrentView.swift */,
-				80B896D528AFEEFA00371E0B /* TodaysTempView.swift */,
-				80B896D328AFEEBD00371E0B /* TodaysDetailView.swift */,
 				80B8FB7D28A9352800006A47 /* weatherApp */,
 				80B8FB7C28A9352800006A47 /* Products */,
 			);
@@ -90,6 +86,10 @@
 				80B8FBA128AAA41500006A47 /* Main.swift */,
 				80B8FB8028A9352800006A47 /* ContentView.swift */,
 				80B896AC28AB6ED100371E0B /* FavoriteView.swift */,
+				80B896D928AFEF5600371E0B /* ThisWeekView.swift */,
+				80B896D728AFEF1D00371E0B /* CurrentView.swift */,
+				80B896D528AFEEFA00371E0B /* TodaysTempView.swift */,
+				80B896D328AFEEBD00371E0B /* TodaysDetailView.swift */,
 				80B896AE28AB77BC00371E0B /* FavBox .swift */,
 				80B8FB8C28A9374200006A47 /* WeatherModel.swift */,
 				80B8FB8E28A9384400006A47 /* WeatherAPIClient.swift */,
