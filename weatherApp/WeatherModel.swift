@@ -39,27 +39,50 @@ struct MainWeatherEntity: Codable {
     var temp_min: Float
     var temp_max: Float
     var humidity: Int
+    let pressure: Int
 }
 
 struct WindEntity: Codable {
-    var speed: Double
+    let speed: Double
+    let deg: Int
 }
 
-enum WeatherCode: String, Codable {
-    case thunderstorm = "200"
-    case drizzle = "3"
-    case rain = "5"
-    case snow = "6"
-    case atmosphere = "7"
-    case clear = "800"
-    case clouds = "8"
-    case partly_cloudy = "801"
+struct WeatherInfoCurrent: Identifiable{
+    var id = UUID()
     
+    let city: String
+    let dt_txt: String
+    let temp: Float
+    let humidity: Int
+    let pressure: Int
+    let speed: Double
+    let description: MainDesc
+    let main: String
+}
+
+struct WeatherInfoHourly: Identifiable, Hashable{
+    var id = UUID()
+    
+    let dt_txt: String
+    let temp: Float
+    let description: MainDesc
+}
+
+
+enum MainDesc: String, Codable {
+    case thunderstorm = "Thunderstorm"
+    case drizzle = "Drizzle"
+    case rain = "Rain"
+    case snow = "snow"
+    case atmosphere = "Atmosphere"
+    case clear = "Clear"
+    case clouds = "Clouds"
+    case partly_cloudy = "Partly Cloudy"
     
     var desc: String {
         switch self {
         case .clear:
-                return "Clear"
+            return "Clear"
         case .drizzle:
             return "Drizzle"
         case .rain:
@@ -69,11 +92,11 @@ enum WeatherCode: String, Codable {
         case .atmosphere:
             return "Atmosphere"
         case .clouds:
-            return "Cloudy"
+            return "Clouds"
         case .thunderstorm:
             return "Thunderstorm"
         case .partly_cloudy:
-            return "Partly Cloudy"
+            return "Partly_cloudy"
         }
     }
     
@@ -84,7 +107,7 @@ enum WeatherCode: String, Codable {
         case .drizzle:
             return Image("rainy")
         case .rain:
-            return Image("rainy")
+            return Image("raindrops")
         case .snow:
             return Image("snowy")
         case .atmosphere:

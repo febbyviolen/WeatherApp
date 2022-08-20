@@ -10,8 +10,10 @@ import Foundation
 import CoreLocation
 
 final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDelegate {
-    @Published private(set) var currentWeather: WeatherEntity?
-    @Published private(set) var weatherData: WeatherResponseEntity?
+   // @Published private(set) var currentWeather: List?
+    @Published private(set) var weatherInfoCurrent: WeatherInfoCurrent?
+    @Published private(set) var weatherInfoHourly: [WeatherInfoHourly] = []
+   // @Published private(set) var cityName: String = ""
     
     private let locationManager = CLLocationManager()
     private let dateFormatter = ISO8601DateFormatter()
@@ -44,8 +46,11 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
                let mainValue = weatherValue.weather.first
             {
                 DispatchQueue.main.async { [weak self] in
-                    self?.currentWeather = WeatherEntity(id: Int(mainValue.id), main: mainValue.main, description: String(mainValue.description))
-                    self?.weatherData = weatherResponse
+                    self?.weatherInfoCurrent = WeatherInfoCurrent (city: weatherResponse.city.name, dt_txt: weatherValue.dt_txt, temp: weatherValue.main.temp, humidity: weatherValue.main.humidity, pressure: weatherValue.main.pressure, speed: weatherValue.wind.speed,  description: MainDesc(rawValue: "\(mainValue.main)")!, main: mainValue.main)
+                    for i in 0...8 {
+                        self?.weatherInfoHourly.append(WeatherInfoHourly(dt_txt: weatherResponse.list[i].dt_txt, temp: weatherResponse.list[i].main.temp, description: MainDesc(rawValue: "\(weatherResponse.list[i].weather.first?.main ?? "Clear")")!))
+                    }
+                    
                 }
             }
         } catch {

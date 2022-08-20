@@ -13,16 +13,17 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .center) {
            
-            if let currentWeather = weatherAPIClient.currentWeather  {
+            if let weatherInfoCurrent = weatherAPIClient.weatherInfoCurrent  {
+                let weatherInfoHourly = weatherAPIClient.weatherInfoHourly
             HStack(alignment: .center, spacing: UIScreen.main.bounds.width*0.7/10) {
                 VStack(alignment: .leading, spacing: 10){
-                    Text("San Fransisco")
+                    Text("\(weatherInfoCurrent.city)")
                         .font(.title2)
                         .foregroundColor(Color("Font"))
-                    Text("\(currentWeather.temperature)º")
+                    Text("\(Int(weatherInfoCurrent.temp))º")
                         .font(.system(size: 70))
                         .foregroundColor(Color("Font"))
-                    Text("\(currentWeather.weatherCode.rawValue)")
+                    Text("\(weatherInfoCurrent.description.desc)")
                         .font(.title3)
                         .foregroundColor(Color("Font"))
                         .frame(alignment: .leading)
@@ -36,7 +37,7 @@ struct ContentView: View {
                 }
                 .padding(30)
 
-                currentWeather.weatherCode.image
+                weatherInfoCurrent.description.image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: UIScreen.main.bounds.width*0.9/2, height: UIScreen.main.bounds.height*2/10, alignment: .trailing)
@@ -45,7 +46,7 @@ struct ContentView: View {
                 
                 Spacer(minLength: 30)
                 
-                TodaysDetailView()
+                TodaysDetailView(weatherInfoCurrent)
                     .padding(.horizontal)
                     .padding(.horizontal)
 
@@ -59,7 +60,7 @@ struct ContentView: View {
                 .padding(.horizontal)
                 .padding(.horizontal)
                 
-                TodaysTempView()
+                TodaysTempView(weatherInfoHourly)
                     .padding(.horizontal)
                     .padding(.horizontal)
 
@@ -98,13 +99,13 @@ struct ContentView_Previews: PreviewProvider {
 
 extension ContentView {
     
-    private func TodaysDetailView() -> some View {
+    private func TodaysDetailView(_ weather: WeatherInfoCurrent) -> some View {
         HStack(alignment: .center, spacing: 50){
             HStack{
                 Image(systemName: "humidity")
                     .font(.title3)
                     .foregroundColor(Color("Font"))
-                Text("12%")
+                Text("\(weather.humidity)%")
                     .font(.subheadline)
                     .foregroundColor(Color("Font"))
             }
@@ -112,7 +113,7 @@ extension ContentView {
                 Image(systemName: "clock")
                     .font(.title3)
                     .foregroundColor(Color("Font"))
-                Text("0.533 mBar")
+                Text("\(weather.pressure) mBar")
                     .font(.subheadline)
                     .foregroundColor(Color("Font"))
             }
@@ -120,28 +121,42 @@ extension ContentView {
                 Image(systemName: "wind")
                     .font(.title3)
                     .foregroundColor(Color("Font"))
-                Text("9km/h")
+                Text("\(weather.speed)km/h")
                     .font(.subheadline)
                     .foregroundColor(Color("Font"))
             }
         }
     }
     
-    private func TodaysTempView() -> some View {
+    private func TodaysTempView(_ weatherInfoHourly: [WeatherInfoHourly]) -> some View {
         ScrollView(.horizontal) {
-            VStack(spacing: 10){
-                Text("10 AM")
-                    .foregroundColor(Color("Font"))
-                    .font(.subheadline)
-                Image("thnderstorm")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(minWidth: 30, idealWidth: 50, maxWidth: 100, minHeight: 30, idealHeight: 50, maxHeight: 30, alignment: .center)
-                Text("30º")
-                    .foregroundColor(Color("Font"))
-                    .font(.headline)
+            HStack(spacing: 20){
+                ForEach(weatherInfoHourly, id: \.self) { weather in
+                    VStack(spacing: 10) {
+                        Text("\(getHour(weather.dt_txt))")
+                            .foregroundColor(Color("Font"))
+                            .font(.subheadline)
+                        weather.description.image
+                           .resizable()
+                           .aspectRatio(contentMode: .fit)
+                           .frame(minWidth: 30, maxWidth: 50, minHeight: 30, maxHeight: 50, alignment: .center)
+                        Text("\(Int(weather.temp))º")
+                           .foregroundColor(Color("Font"))
+                           .font(.headline)
+                        
+                    }
+                }
             }
-
+        }
+    }
+    
+    private func getHour(_ hour: String) -> String {
+        let split = hour.split(separator: " ")
+        let splitt = split[1].split(separator: ":")
+        if(Int(splitt[0])! > 12) {
+            return "\(String(splitt[0])) PM"
+        } else {
+            return "\(String(splitt[0])) AM"
         }
     }
     
