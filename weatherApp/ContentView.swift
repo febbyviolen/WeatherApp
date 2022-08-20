@@ -11,8 +11,6 @@ struct ContentView: View {
     @StateObject private var weatherAPIClient = WeatherAPIClient()
     var body: some View {
         VStack(alignment: .center) {
-            
-        
             if let weatherInfoCurrent = weatherAPIClient.weatherInfoCurrent  {
                 let weatherInfoHourly = weatherAPIClient.weatherInfoHourly
                 let weatherInfoDaily = weatherAPIClient.weatherInfoDaily
@@ -25,16 +23,13 @@ struct ContentView: View {
                         .font(.system(size: 60))
                         .foregroundColor(Color("Font"))
                     Text("\(weatherInfoCurrent.description.desc)")
-                        .font(.title3)
+                        .font(.title2)
                         .foregroundColor(Color("Font"))
                         .frame(alignment: .leading)
-                        .padding()
+                        .padding(3)
                         .padding(.horizontal, 5)
                         .background(.gray.opacity(0.2))
                         .cornerRadius(30)
-                        .offset(x: -10)
-
-
                 }
                 .padding(30)
 
@@ -69,14 +64,13 @@ struct ContentView: View {
 
                 ThisWeekView(weatherInfoDaily)
                     .padding(.horizontal)
-                    .padding(.horizontal)
-                    .padding(.horizontal)
-                
+                    .padding(.horizontal, 25)
 
             }else {
                 Text("No weather info available yet.\nTap on refresh to fetch new data.\nMake sure you have enabled location permissions for the app.")
                     .font(.body)
                     .multilineTextAlignment(.center)
+                
                 Button("Refresh", action: {
                     Task {
                         await weatherAPIClient.fetchWeather()
@@ -124,7 +118,7 @@ extension ContentView {
                 Image(systemName: "wind")
                     .font(.title3)
                     .foregroundColor(Color("Font"))
-                Text("\(weather.speed)km/h")
+                Text("\(weather.speed, specifier: "%.2f")km/h")
                     .font(.subheadline)
                     .foregroundColor(Color("Font"))
             }
@@ -132,7 +126,7 @@ extension ContentView {
     }
     
     private func TodaysTempView(_ weatherInfoHourly: [WeatherInfoHourly]) -> some View {
-        ScrollView(.horizontal) {
+        ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20){
                 ForEach(weatherInfoHourly, id: \.self) { weather in
                     VStack(spacing: 10) {
@@ -173,7 +167,7 @@ extension ContentView {
     }
 
     private func ThisWeekView(_ weatherInfoDaily: [WeatherInfoDaily]) -> some View {
-        ScrollView(.vertical){
+        ScrollView(.vertical, showsIndicators: false){
             VStack{
                 ForEach(weatherInfoDaily, id:\.self){ weather in
                     HStack(spacing: 15){
@@ -187,7 +181,7 @@ extension ContentView {
                         Spacer()
                         Text("\(Int(weather.min))º")
                             .fontWeight(.semibold)
-                            .foregroundColor(Color("Font"))
+                            .foregroundColor(Color("Font2"))
                         Text("\(Int(weather.max))º")
                             .foregroundColor(Color("Font"))
                     }

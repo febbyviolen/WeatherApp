@@ -19,6 +19,7 @@ struct Main: View {
                     Image(systemName: "heart")
                 }
         }
+        
        
     }
 }
