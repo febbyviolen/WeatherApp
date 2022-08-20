@@ -9,26 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var weatherAPIClient = WeatherAPIClient()
-    
     var body: some View {
         VStack(alignment: .center) {
-           
+            
+        
             if let weatherInfoCurrent = weatherAPIClient.weatherInfoCurrent  {
                 let weatherInfoHourly = weatherAPIClient.weatherInfoHourly
+                let weatherInfoDaily = weatherAPIClient.weatherInfoDaily
             HStack(alignment: .center, spacing: UIScreen.main.bounds.width*0.7/10) {
                 VStack(alignment: .leading, spacing: 10){
                     Text("\(weatherInfoCurrent.city)")
                         .font(.title2)
                         .foregroundColor(Color("Font"))
                     Text("\(Int(weatherInfoCurrent.temp))º")
-                        .font(.system(size: 70))
+                        .font(.system(size: 60))
                         .foregroundColor(Color("Font"))
                     Text("\(weatherInfoCurrent.description.desc)")
                         .font(.title3)
                         .foregroundColor(Color("Font"))
                         .frame(alignment: .leading)
                         .padding()
-                        .padding(.horizontal)
+                        .padding(.horizontal, 5)
                         .background(.gray.opacity(0.2))
                         .cornerRadius(30)
                         .offset(x: -10)
@@ -64,11 +65,13 @@ struct ContentView: View {
                     .padding(.horizontal)
                     .padding(.horizontal)
 
-                Spacer(minLength: 20)
+                Spacer(minLength: 40)
 
-                ThisWeekView()
+                ThisWeekView(weatherInfoDaily)
                     .padding(.horizontal)
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.horizontal)
+                
 
             }else {
                 Text("No weather info available yet.\nTap on refresh to fetch new data.\nMake sure you have enabled location permissions for the app.")
@@ -160,39 +163,35 @@ extension ContentView {
         }
     }
     
+    private func getDay(_ day: Int) -> String {
+        let unixTimestamp = Double(day)
+        let date = Date(timeIntervalSince1970: unixTimestamp)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        return dateFormatter.string(from: date)
+        
+    }
 
-    private func ThisWeekView() -> some View {
+    private func ThisWeekView(_ weatherInfoDaily: [WeatherInfoDaily]) -> some View {
         ScrollView(.vertical){
-            HStack(spacing: 15){
-                Text("Monday")
-                    .foregroundColor(Color("Font"))
-                Spacer()
-                Image("thnderstorm")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(minWidth: 30, idealWidth: 30, maxWidth: 100, minHeight: 30, idealHeight: 30, maxHeight: 100, alignment: .center)
-                Spacer()
-                Text("30º")
-                    .fontWeight(.semibold)
-                    .foregroundColor(Color("Font"))
-                Text("35º")
-                    .foregroundColor(Color("Font"))
-            }
-
-            HStack(spacing: 15){
-                Text("Monday")
-                    .foregroundColor(Color("Font"))
-                Spacer()
-                Image("thnderstorm")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(minWidth: 30, idealWidth: 30, maxWidth: 100, minHeight: 30, idealHeight: 30, maxHeight: 100, alignment: .center)
-                Spacer()
-                Text("30º")
-                    .fontWeight(.semibold)
-                    .foregroundColor(Color("Font"))
-                Text("35º")
-                    .foregroundColor(Color("Font"))
+            VStack{
+                ForEach(weatherInfoDaily, id:\.self){ weather in
+                    HStack(spacing: 15){
+                        Text("\(getDay(weather.dt))")
+                            .foregroundColor(Color("Font"))
+                        Spacer()
+                        weather.description.image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(minWidth: 30, idealWidth: 30, maxWidth: 100, minHeight: 30, idealHeight: 30, maxHeight: 100, alignment: .center)
+                        Spacer()
+                        Text("\(Int(weather.min))º")
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color("Font"))
+                        Text("\(Int(weather.max))º")
+                            .foregroundColor(Color("Font"))
+                    }
+                }
             }
         }
     }

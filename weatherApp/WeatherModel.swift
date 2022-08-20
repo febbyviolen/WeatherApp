@@ -13,6 +13,22 @@ struct WeatherResponseEntity: Codable {
     let city: City
 }
 
+struct DailyWeatherResponseEntity: Codable {
+    let list: [ListDaily]
+}
+
+struct ListDaily: Codable {
+    let temp: Temp
+    let dt: Int
+    let weather: [WeatherEntity]
+}
+
+struct Temp: Codable {
+    let min: Double
+    let max: Double
+    
+}
+
 struct City: Codable {
     let id: Int
     let name: String
@@ -34,10 +50,10 @@ struct WeatherEntity: Codable {
 }
 
 struct MainWeatherEntity: Codable {
-    var temp: Float
-    var feels_like: Float
-    var temp_min: Float
-    var temp_max: Float
+    var temp: Double
+    var feels_like: Double
+    var temp_min: Double
+    var temp_max: Double
     var humidity: Int
     let pressure: Int
 }
@@ -52,7 +68,7 @@ struct WeatherInfoCurrent: Identifiable{
     
     let city: String
     let dt_txt: String
-    let temp: Float
+    let temp: Double
     let humidity: Int
     let pressure: Int
     let speed: Double
@@ -64,7 +80,16 @@ struct WeatherInfoHourly: Identifiable, Hashable{
     var id = UUID()
     
     let dt_txt: String
-    let temp: Float
+    let temp: Double
+    let description: MainDesc
+}
+
+struct WeatherInfoDaily: Identifiable, Hashable{
+    var id = UUID()
+    
+    let dt: Int
+    let max: Double
+    let min: Double
     let description: MainDesc
 }
 

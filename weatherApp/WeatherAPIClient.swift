@@ -10,10 +10,10 @@ import Foundation
 import CoreLocation
 
 final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDelegate {
-   // @Published private(set) var currentWeather: List?
     @Published private(set) var weatherInfoCurrent: WeatherInfoCurrent?
     @Published private(set) var weatherInfoHourly: [WeatherInfoHourly] = []
-   // @Published private(set) var cityName: String = ""
+    @Published private(set) var weatherInfoDaily: [WeatherInfoDaily] = []
+   
     
     private let locationManager = CLLocationManager()
     private let dateFormatter = ISO8601DateFormatter()
@@ -24,17 +24,15 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
         locationManager.delegate = self
         requestLocation()
     }
-
+    
     func fetchWeather() async {
         guard let location = locationManager.location else {
             requestLocation()
             
             return
         }
-        print(location.coordinate.latitude)
-        print(location.coordinate.longitude)
         
-        guard let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?units=metric&lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=\(apiKey)"
+        guard let url = URL(string: "https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=\(apiKey)&units=metric"
         ) else {
             fatalError("Missing URL")
         }
@@ -47,7 +45,8 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
             {
                 DispatchQueue.main.async { [weak self] in
                     self?.weatherInfoCurrent = WeatherInfoCurrent (city: weatherResponse.city.name, dt_txt: weatherValue.dt_txt, temp: weatherValue.main.temp, humidity: weatherValue.main.humidity, pressure: weatherValue.main.pressure, speed: weatherValue.wind.speed,  description: MainDesc(rawValue: "\(mainValue.main)")!, main: mainValue.main)
-                    for i in 0...8 {
+                    self?.weatherInfoHourly.removeAll()
+                    for i in 0...24 {
                         self?.weatherInfoHourly.append(WeatherInfoHourly(dt_txt: weatherResponse.list[i].dt_txt, temp: weatherResponse.list[i].main.temp, description: MainDesc(rawValue: "\(weatherResponse.list[i].weather.first?.main ?? "Clear")")!))
                     }
                     
@@ -56,6 +55,32 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
         } catch {
             // handle the error
         }
+        
+        guard let url2 = URL(string: "https://pro.openweathermap.org/data/2.5/forecast/daily?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=\(apiKey)&units=metric"
+        ) else {
+            fatalError("Missing URL")
+        }
+        
+        do {
+            let (data2, _) = try await URLSession.shared.data(from: url2)
+            if let weatherResponse2 = try? JSONDecoder().decode(DailyWeatherResponseEntity.self, from: data2)
+               
+            {
+                DispatchQueue.main.async { [weak self] in
+                    self?.weatherInfoDaily.removeAll()
+                    for i in 0...6 {
+                        self?.weatherInfoDaily.append(WeatherInfoDaily(dt: weatherResponse2.list[i].dt, max: weatherResponse2.list[i].temp.max, min: weatherResponse2.list[i].temp.min, description: MainDesc(rawValue: "\(weatherResponse2.list[i].weather.first?.main ?? "Clear")")!))
+                    }
+                    
+                }
+            }
+        } catch {
+            // handle the error
+        }
+        
+        print(location.coordinate.latitude)
+        print(location.coordinate.longitude)
+        
     }
     
     private func requestLocation() {
