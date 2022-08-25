@@ -28,16 +28,16 @@ struct ContentView: View {
             
             ZStack {
                 VStack(alignment: .center) {
-//                    if let weatherInfoCurrent = weatherAPIClient.weatherInfoCurrent {
+                    if let weatherInfoCurrent = weatherAPIClient.weatherInfoCurrent {
 
-                    let weatherInfoCurrent = WeatherInfoCurrent(city: "Seoul", dt_txt: "2020-08-05 13:00:00", temp: 30.20, humidity: 30, feels_like: 32.3 , speed: 120.23, description: MainDesc(rawValue: "Clear")!, main: "apoye", country: "South Korea")
-
-                    let weatherInfoHourly : [WeatherInfoHourly] = [(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!))]
-                    
-                    let weatherInfoDaily : [WeatherInfoDaily] = [(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)), (WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!))]
+//                    let weatherInfoCurrent = WeatherInfoCurrent(city: "Seoul", dt_txt: "2020-08-05 13:00:00", temp: 30.20, humidity: 30, feels_like: 32.3 , speed: 120.23, description: MainDesc(rawValue: "Clear")!, main: "apoye", country: "South Korea")
 //
-//                    let weatherInfoHourly = weatherAPIClient.weatherInfoHourly
-//                    let weatherInfoDaily = weatherAPIClient.weatherInfoDaily
+//                    let weatherInfoHourly : [WeatherInfoHourly] = [(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!))]
+//
+//                    let weatherInfoDaily : [WeatherInfoDaily] = [(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)), (WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!))]
+
+                    let weatherInfoHourly = weatherAPIClient.weatherInfoHourly
+                    let weatherInfoDaily = weatherAPIClient.weatherInfoDaily
                     
                     HStack(alignment: .center, spacing: UIScreen.main.bounds.width*0.7/10) {
                         VStack(alignment: .leading, spacing: 5){
@@ -54,8 +54,8 @@ struct ContentView: View {
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color.white)
                         }
-                        .padding(.horizontal, 40)
-                        .padding(.top, 60)
+                        .padding(.horizontal, 35)
+                        .padding(.top, 65)
                        
                         Spacer()
 
@@ -113,18 +113,18 @@ struct ContentView: View {
                             }
                         }
 //
-//                    }
-//
-//                    }else {
+                    }
+
+                    }else {
 
                     }
                 }
-//                .onAppear {
-//                    Task {
-//                        await weatherAPIClient.fetchWeather()
-//                        print(count)
-//                    }
-//                }
+                .onAppear {
+                    Task {
+                        await weatherAPIClient.fetchWeather()
+                        print(count)
+                    }
+                }
                 
             }
             .background(LinearGradient(colors: [Color("Bluebox").opacity(0.8), Color("Bluebox")], startPoint: .init(x:0.1, y:0.2), endPoint: .bottomTrailing)).ignoresSafeArea()
@@ -190,7 +190,7 @@ extension ContentView {
             .overlay{
                 VStack {
                     HStack() {
-                        VStack(alignment: .center){
+                        VStack(alignment: .center, spacing: 8){
                             HStack{
                                 Text("\(weather.description.desc)")
                                     .font(.title)

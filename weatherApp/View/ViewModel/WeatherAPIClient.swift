@@ -17,12 +17,12 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
     
     private let locationManager = CLLocationManager()
     private let dateFormatter = ISO8601DateFormatter()
-    private let apiKey = "0b4bb5df77b8bc40e48691ac7b7f5e1e"
+    private let apiKey = "deletedAPIKEY"
     
     override init() {
         super.init()
-        locationManager.delegate = self
-        requestLocation()
+      //  locationManager.delegate = self
+       // requestLocation()
     }
     
     func fetchWeather() async {
