@@ -19,6 +19,7 @@ struct ContentView: View {
     var bottomSheetTranslationProrated2: CGFloat {
         (bottomSheetTranslation - BottomSheetPosition.middle.rawValue)/(BottomSheetPosition.top.rawValue - BottomSheetPosition.middle.rawValue) + 0.6
     }
+    @State var count = 0
     
     var body: some View {
         GeometryReader { geometry in
@@ -28,12 +29,10 @@ struct ContentView: View {
             ZStack {
                 VStack(alignment: .center) {
                     if let weatherInfoCurrent = weatherAPIClient.weatherInfoCurrent  {
-                        let weatherInfoHourly = weatherAPIClient.weatherInfoHourly
-                        let weatherInfoDaily = weatherAPIClient.weatherInfoDaily
                         
                     HStack(alignment: .center, spacing: UIScreen.main.bounds.width*0.7/10) {
                         VStack(alignment: .leading, spacing: 5){
-                            Text("INDONESIA,,")
+                            Text("\(countryName(from:weatherInfoCurrent.country))")
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .foregroundColor(Color("Font"))
@@ -41,7 +40,7 @@ struct ContentView: View {
                                 .font(.title)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color("Font"))
-                            Text("21 August 2022")
+                            Text("\(getDate(weatherInfoCurrent.dt_txt))")
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color("Font").opacity(0.5))
@@ -69,8 +68,12 @@ struct ContentView: View {
                 .onAppear {
                     Task {
                         await weatherAPIClient.fetchWeather()
+                        print(count+=1)
                     }
                 }
+                
+                let weatherInfoHourly = weatherAPIClient.weatherInfoHourly
+                let weatherInfoDaily = weatherAPIClient.weatherInfoDaily
                 
                 Spacer()
                 BottomSheetView(position: $bottomSheetPosition) {
@@ -90,7 +93,7 @@ struct ContentView: View {
                                     .padding(.horizontal, 25)
                                     .padding(.horizontal)
 
-                                HourlyView()
+                                hourlyView(weatherInfoHourly)
                                     .padding(.horizontal, 5)
                                 
                                 Spacer()
@@ -103,7 +106,7 @@ struct ContentView: View {
                                     .padding(.horizontal, 25)
                                     .padding(.horizontal)
                                 
-                                DailyView()
+                                dailyView(weatherInfoDaily)
                                     .padding(.leading)
 
                             }.offset(y:  bottomSheetTranslationProrated2 * -60)
@@ -135,6 +138,47 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 extension ContentView {
+    private func getHour(_ hour: String) -> String {
+        let split = hour.split(separator: " ")
+        let splitt = split[1].split(separator: ":")
+        if(Int(splitt[0])! > 12) {
+            return "\(String(splitt[0])) PM"
+        } else {
+            return "\(String(splitt[0])) AM"
+        }
+    }
+    
+    private func getDate(_ get: String) -> String {
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = "EEEEE, dd MM"
+        
+        if let date = dateFormatterGet.date(from: get) {
+            return dateFormatterPrint.string(from: date)
+        } else {
+            return ".."
+        }
+    }
+    
+    private func getDay(_ day: Int) -> String {
+        let unixTimestamp = Double(day)
+        let date = Date(timeIntervalSince1970: unixTimestamp)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        return dateFormatter.string(from: date)
+        
+    }
+    
+    func countryName(from countryCode: String) -> String {
+        if let name = (Locale.current).localizedString(forRegionCode: countryCode) {
+            return name
+        }
+
+        return countryCode
+    }
+    
     private func TodaysTempView() -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20){
@@ -154,48 +198,7 @@ extension ContentView {
             }
         }
     }
-    
-    private func getHour(_ hour: String) -> String {
-        let split = hour.split(separator: " ")
-        let splitt = split[1].split(separator: ":")
-        if(Int(splitt[0])! > 12) {
-            return "\(String(splitt[0])) PM"
-        } else {
-            return "\(String(splitt[0])) AM"
-        }
-    }
-    
-    private func getDay(_ day: Int) -> String {
-        let unixTimestamp = Double(day)
-        let date = Date(timeIntervalSince1970: unixTimestamp)
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE"
-        return dateFormatter.string(from: date)
-        
-    }
 
-    private func ThisWeekView() -> some View {
-        ScrollView(.vertical, showsIndicators: false){
-            VStack{
-                HStack(spacing: 15){
-                    Text("MONDAY")
-                        .foregroundColor(Color("Font"))
-                    Spacer()
-                    Image("sunnyIcon")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(minWidth: 30, idealWidth: 30, maxWidth: 100, minHeight: 30, idealHeight: 30, maxHeight: 100, alignment: .center)
-                    Spacer()
-                    Text("30º")
-                        .fontWeight(.semibold)
-                        .foregroundColor(Color("Font2"))
-                    Text("32º")
-                        .foregroundColor(Color("Font"))
-                }
-            }
-        }
-    }
-    
     private func currentWeatherBox(_ point: CGFloat) -> some View {
         RoundedRectangle(cornerRadius: 40)
             .fill(LinearGradient(colors: [Color("Bluebox").opacity(0.7), Color("Bluebox")], startPoint: .init(x:0.1, y:0.2), endPoint: .bottom))
@@ -286,5 +289,73 @@ extension ContentView {
             }
     }
     
+    private func hourlyView(_ weather: [WeatherInfoHourly]) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 20){
+                ForEach(weather, id: \.self) { w in
+                    RoundedRectangle(cornerRadius: 40)
+                        .fill(.white)
+                        .frame(width: 80, height: 130)
+                        .cornerRadius(40)
+                        .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 0)
+                        .overlay{
+                            VStack(spacing: 5) {
+                                Text("\(getHour(w.dt_txt))")
+                                    .foregroundColor(Color.gray)
+                                    .fontWeight(.semibold)
+                                    .font(.subheadline)
+                                w.description.image2
+                                   .resizable()
+                                   .aspectRatio(contentMode: .fit)
+                                   .frame(minWidth: 30, maxWidth: 50, minHeight: 30, maxHeight: 50, alignment: .center)
+                                Text("\(Int(w.temp))º")
+                                    .foregroundColor(.gray)
+                                    .fontWeight(.bold)
+                                    .font(.title3)
+                            }
+                    }
+                }
+                
+            }
+            .padding(.horizontal)
+        }
+        .padding(.horizontal)
+    }
+    
+    private func dailyView(_ weather: [WeatherInfoDaily]) -> some View {
+        ScrollView(.vertical, showsIndicators: false){
+            VStack{
+                ForEach(weather, id: \.self) { data in
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(.white)
+                        .frame(height: 60)
+                        .overlay(alignment: .center) {
+                            HStack(alignment: .center, spacing: 15){
+                                Text("\(getDay(data.dt))")
+                                    .foregroundColor(Color.blue)
+                                    .fontWeight(.semibold)
+                                Spacer()
+                                data.description.image2
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(minWidth: 20, maxWidth: 30, minHeight: 20, maxHeight: 40, alignment: .center)
+                                Spacer()
+                                Text("\(Int(data.min))º")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color("Font2"))
+                                Text("\(Int(data.max))º")
+                                    .foregroundColor(Color("Font"))
+                            }
+                            .padding(.horizontal)
+                        }
+                        
+                        .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 0)
+                    .padding(.horizontal)
+                }
+            }
+        }
+    }
+    
+   
     
 }

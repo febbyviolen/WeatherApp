@@ -19,6 +19,6 @@ struct BottomSlide: View {
 
 struct BottomSlide_preview: PreviewProvider {
     static var previews: some View {
-        HourlyView()
+        BottomSlide()
     }
 }

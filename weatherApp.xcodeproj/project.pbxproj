@@ -10,8 +10,6 @@
 		8088D68F28B260C500E142B3 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 8088D68E28B260C500E142B3 /* BottomSheet */; };
 		8088D69328B26D7D00E142B3 /* ButtomSheetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8088D69228B26D7D00E142B3 /* ButtomSheetModel.swift */; };
 		8088D69528B26FEF00E142B3 /* BottomSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8088D69428B26FEF00E142B3 /* BottomSlide.swift */; };
-		8088D69928B28A3300E142B3 /* HourlyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8088D69828B28A3300E142B3 /* HourlyView.swift */; };
-		8088D69B28B4BDD800E142B3 /* DailyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8088D69A28B4BDD800E142B3 /* DailyView.swift */; };
 		8097292528B2381800702904 /* Dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8097292428B2381800702904 /* Dummy.swift */; };
 		80B896AD28AB6ED200371E0B /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B896AC28AB6ED100371E0B /* FavoriteView.swift */; };
 		80B896AF28AB77BC00371E0B /* FavBox .swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B896AE28AB77BC00371E0B /* FavBox .swift */; };
@@ -40,8 +38,6 @@
 /* Begin PBXFileReference section */
 		8088D69228B26D7D00E142B3 /* ButtomSheetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtomSheetModel.swift; sourceTree = "<group>"; };
 		8088D69428B26FEF00E142B3 /* BottomSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSlide.swift; sourceTree = "<group>"; };
-		8088D69828B28A3300E142B3 /* HourlyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HourlyView.swift; path = "Preview Content/HourlyView.swift"; sourceTree = "<group>"; };
-		8088D69A28B4BDD800E142B3 /* DailyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyView.swift; sourceTree = "<group>"; };
 		8097292428B2381800702904 /* Dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dummy.swift; sourceTree = "<group>"; };
 		80B896AC28AB6ED100371E0B /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
 		80B896AE28AB77BC00371E0B /* FavBox .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavBox .swift"; sourceTree = "<group>"; };
@@ -79,14 +75,23 @@
 		8088D69128B2612000E142B3 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8088D69C28B4C8DF00E142B3 /* ViewModel */,
 				80B8FB7E28A9352800006A47 /* weatherAppApp.swift */,
 				80B8FBA128AAA41500006A47 /* Main.swift */,
 				80B8FB8028A9352800006A47 /* ContentView.swift */,
 				80B896AC28AB6ED100371E0B /* FavoriteView.swift */,
 				80B896AE28AB77BC00371E0B /* FavBox .swift */,
-				80B8FB8E28A9384400006A47 /* WeatherAPIClient.swift */,
+				8088D69428B26FEF00E142B3 /* BottomSlide.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		8088D69C28B4C8DF00E142B3 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				80B8FB8E28A9384400006A47 /* WeatherAPIClient.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		80B8FB7228A9352800006A47 = {
@@ -113,9 +118,6 @@
 				80B8FB8228A9352F00006A47 /* Assets.xcassets */,
 				80B8FB8428A9352F00006A47 /* Preview Content */,
 				8097292428B2381800702904 /* Dummy.swift */,
-				8088D69828B28A3300E142B3 /* HourlyView.swift */,
-				8088D69428B26FEF00E142B3 /* BottomSlide.swift */,
-				8088D69A28B4BDD800E142B3 /* DailyView.swift */,
 			);
 			path = weatherApp;
 			sourceTree = "<group>";
@@ -205,7 +207,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8088D69B28B4BDD800E142B3 /* DailyView.swift in Sources */,
 				8088D69328B26D7D00E142B3 /* ButtomSheetModel.swift in Sources */,
 				80B896AF28AB77BC00371E0B /* FavBox .swift in Sources */,
 				80B8FBA228AAA41500006A47 /* Main.swift in Sources */,
@@ -215,7 +216,6 @@
 				80B8FB8F28A9384400006A47 /* WeatherAPIClient.swift in Sources */,
 				80B896AD28AB6ED200371E0B /* FavoriteView.swift in Sources */,
 				8088D69528B26FEF00E142B3 /* BottomSlide.swift in Sources */,
-				8088D69928B28A3300E142B3 /* HourlyView.swift in Sources */,
 				80B8FB7F28A9352800006A47 /* weatherAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

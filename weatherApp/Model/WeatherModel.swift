@@ -41,6 +41,7 @@ struct List: Codable {
     let visibility: Int
     let wind: WindEntity
     let dt_txt: String
+    let country: String
 }
 
 struct WeatherEntity: Codable {
@@ -74,6 +75,7 @@ struct WeatherInfoCurrent: Identifiable{
     let speed: Double
     let description: MainDesc
     let main: String
+    let country: String
 }
 
 struct WeatherInfoHourly: Identifiable, Hashable{
@@ -159,7 +161,7 @@ enum MainDesc: String, Codable {
         case .atmosphere:
             return Image("windyCloudyIcon")
         case .clouds:
-            return Image("mostly_cloudy")
+            return Image("cloudyIcon")
         case .thunderstorm:
             return Image("thunderstormIcon")
         case .partly_cloudy:
