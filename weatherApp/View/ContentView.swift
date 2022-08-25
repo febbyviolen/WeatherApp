@@ -17,7 +17,7 @@ struct ContentView: View {
         (bottomSheetTranslation - BottomSheetPosition.middle.rawValue)/(BottomSheetPosition.top.rawValue - BottomSheetPosition.middle.rawValue)
     }
     var bottomSheetTranslationProrated2: CGFloat {
-        (bottomSheetTranslation - BottomSheetPosition.middle.rawValue)/(BottomSheetPosition.top.rawValue - BottomSheetPosition.middle.rawValue) + 0.6
+        (bottomSheetTranslation - BottomSheetPosition.middle.rawValue)/(BottomSheetPosition.top.rawValue - BottomSheetPosition.middle.rawValue)
     }
     @State var count = 0
     
@@ -28,108 +28,111 @@ struct ContentView: View {
             
             ZStack {
                 VStack(alignment: .center) {
-                    if let weatherInfoCurrent = weatherAPIClient.weatherInfoCurrent  {
-                        
+//                    if let weatherInfoCurrent = weatherAPIClient.weatherInfoCurrent {
+
+                    let weatherInfoCurrent = WeatherInfoCurrent(city: "Seoul", dt_txt: "2020-08-05 13:00:00", temp: 30.20, humidity: 30, feels_like: 32.3 , speed: 120.23, description: MainDesc(rawValue: "Clear")!, main: "apoye", country: "South Korea")
+
+                    let weatherInfoHourly : [WeatherInfoHourly] = [(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!))]
+                    
+                    let weatherInfoDaily : [WeatherInfoDaily] = [(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)), (WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!))]
+//
+//                    let weatherInfoHourly = weatherAPIClient.weatherInfoHourly
+//                    let weatherInfoDaily = weatherAPIClient.weatherInfoDaily
+                    
                     HStack(alignment: .center, spacing: UIScreen.main.bounds.width*0.7/10) {
                         VStack(alignment: .leading, spacing: 5){
-                            Text("\(countryName(from:weatherInfoCurrent.country))")
+                            Text("\(countryName(from:weatherInfoCurrent.country)),")
                                 .font(.title)
                                 .fontWeight(.bold)
-                                .foregroundColor(Color("Font"))
-                            Text("\(Int(weatherInfoCurrent.temp))º")
+                                .foregroundColor(Color.white)
+                            Text("\(weatherInfoCurrent.city)")
                                 .font(.title)
                                 .fontWeight(.semibold)
-                                .foregroundColor(Color("Font"))
+                                .foregroundColor(Color.white)
                             Text("\(getDate(weatherInfoCurrent.dt_txt))")
                                 .font(.caption)
                                 .fontWeight(.semibold)
-                                .foregroundColor(Color("Font").opacity(0.5))
+                                .foregroundColor(Color.white)
                         }
-                        .padding(30)
-                        .offset(y : -bottomSheetTranslationProrated * imageOffset)
-                        
+                        .padding(.horizontal, 40)
+                        .padding(.top, 60)
+                       
                         Spacer()
 
                     }
+                    .offset(y : -bottomSheetTranslationProrated * imageOffset)
+                    
+                    hourlyView(weatherInfoHourly)
+                        .padding(.vertical)
+                        .offset(y : -bottomSheetTranslationProrated * imageOffset)
+                    
+                    
+                    Spacer()
+                    BottomSheetView(position: $bottomSheetPosition) {
                         
+                    } content: {
+                        BottomSlide()
+                            .overlay(alignment: .top){
+                                VStack(alignment: .center){
+                                    currentWeatherBox(bottomSheetTranslationProrated, weatherInfoCurrent)
+                                        .padding(.horizontal)
+                                        .padding(.horizontal)
+                                        .offset(y: -150)
+                                        .onTapGesture {
+                                            bottomSheetPosition = .middle
+                                        }
+                                    
+                                    HStack {
+                                        Text("7 Days Forecast")
+                                            .font(.title2)
+                                            .fontWeight(.bold)
+                                            .padding(.top)
+                                            .padding(.top)
+                                            .padding(.horizontal)
+                                            .padding(.horizontal)
+                                        Spacer()
+                                    }.offset(y: -150)
+                                    
+                                    dailyView(weatherInfoDaily)
+                                        .offset(y: -150)
+                                    
+                                   
 
-                    }else {
-                        Text("No weather info available yet.\nTap on refresh to fetch new data.\nMake sure you have enabled location permissions for the app.")
-                            .font(.body)
-                            .multilineTextAlignment(.center)
-                        
-                        Button("Refresh", action: {
-                            Task {
-                                await weatherAPIClient.fetchWeather()
+                                }.offset(y: hasDragged ? bottomSheetTranslationProrated + 70 : 0)
                             }
-                        })
                     }
-                }
-                .onAppear {
-                    Task {
-                        await weatherAPIClient.fetchWeather()
-                        print(count+=1)
-                    }
-                }
-                
-                let weatherInfoHourly = weatherAPIClient.weatherInfoHourly
-                let weatherInfoDaily = weatherAPIClient.weatherInfoDaily
-                
-                Spacer()
-                BottomSheetView(position: $bottomSheetPosition) {
-                    
-                } content: {
-                    BottomSlide()
-                        .overlay(alignment: .top){
-                            VStack(alignment: .leading){
-                                currentWeatherBox(bottomSheetTranslationProrated)
-                                    .padding(.horizontal)
-                                    .padding(.horizontal)
-                                Text("Today")
-                                    .font(.title2)
-                                    .fontWeight(.bold)
-                                    .padding(.top)
-                                    .padding(.top)
-                                    .padding(.horizontal, 25)
-                                    .padding(.horizontal)
-
-                                hourlyView(weatherInfoHourly)
-                                    .padding(.horizontal, 5)
+                    .onBottomSheetDrag{ translation in
+                        bottomSheetTranslation = translation / screenHeight
+                        
+                        withAnimation(.linear){
+                            if bottomSheetPosition == BottomSheetPosition.top {
+                                hasDragged = true
                                 
-                                Spacer()
-                                
-                                Text("7 Days Forecast")
-                                    .font(.title2)
-                                    .fontWeight(.bold)
-                                    .padding(.top)
-                                    .padding(.top)
-                                    .padding(.horizontal, 25)
-                                    .padding(.horizontal)
-                                
-                                dailyView(weatherInfoDaily)
-                                    .padding(.leading)
-
-                            }.offset(y:  bottomSheetTranslationProrated2 * -60)
+                            } else {
+                                hasDragged = false
+                            }
                         }
-                }
-                .onBottomSheetDrag{ translation in
-                    bottomSheetTranslation = translation / screenHeight
-                    
-                    withAnimation(.linear){
-                        if bottomSheetPosition == BottomSheetPosition.top {
-                            hasDragged = true
-                        } else {
-                            hasDragged = false
-                        }
+//
+//                    }
+//
+//                    }else {
+
                     }
-                    
                 }
+//                .onAppear {
+//                    Task {
+//                        await weatherAPIClient.fetchWeather()
+//                        print(count)
+//                    }
+//                }
                 
-            .background(Color("Background").ignoresSafeArea())
             }
+            .background(LinearGradient(colors: [Color("Bluebox").opacity(0.8), Color("Bluebox")], startPoint: .init(x:0.1, y:0.2), endPoint: .bottomTrailing)).ignoresSafeArea()
+                    
         }
     }
 }
+            
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
@@ -153,7 +156,7 @@ extension ContentView {
         dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
         
         let dateFormatterPrint = DateFormatter()
-        dateFormatterPrint.dateFormat = "EEEEE, dd MM"
+        dateFormatterPrint.dateFormat = "EEEE, dd MMMM"
         
         if let date = dateFormatterGet.date(from: get) {
             return dateFormatterPrint.string(from: date)
@@ -178,63 +181,50 @@ extension ContentView {
 
         return countryCode
     }
-    
-    private func TodaysTempView() -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 20){
-                VStack(spacing: 10) {
-                    Text("10PM")
-                        .foregroundColor(Color("Font"))
-                        .font(.subheadline)
-                    Image("cloudyIcon")
-                       .resizable()
-                       .aspectRatio(contentMode: .fit)
-                       .frame(minWidth: 30, maxWidth: 50, minHeight: 30, maxHeight: 50, alignment: .center)
-                    Text("30º")
-                       .foregroundColor(Color("Font"))
-                       .font(.headline)
-                    
-                }
-            }
-        }
-    }
 
-    private func currentWeatherBox(_ point: CGFloat) -> some View {
+    private func currentWeatherBox(_ point: CGFloat, _ weather: WeatherInfoCurrent) -> some View {
         RoundedRectangle(cornerRadius: 40)
-            .fill(LinearGradient(colors: [Color("Bluebox").opacity(0.7), Color("Bluebox")], startPoint: .init(x:0.1, y:0.2), endPoint: .bottom))
+            .fill(LinearGradient(colors: [Color("Bluebox2"), Color("Bluebox")], startPoint: .init(x:0.1, y:0.2), endPoint: .bottom))
             .frame(width: (UIScreen.main.bounds.width * 9/10), height: ((UIScreen.main.bounds.height * 4/10) - ( point * (UIScreen.main.bounds.height * 4/10 - UIScreen.main.bounds.height * (2.5/10)))), alignment: .center)
             .shadow(color: Color("Bluebox").opacity(0.4), radius: 10, x: 0, y: 20)
             .overlay{
                 VStack {
                     HStack() {
-                        VStack(alignment: .leading){
-                            Text("Sunny")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .overlay{
-                                    Image("drizzle")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 230, height: 230)
-                                        .offset(x: 40, y: -125)
-                                        .shadow(color: Color.white, radius: 50, x: 0, y: 50)
-                                }
-                            Text("Sun bright like a diamond")
-                                .foregroundColor(.white)
+                        VStack(alignment: .center){
+                            HStack{
+                                Text("\(weather.description.desc)")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .overlay{
+                                        weather.description.image
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 230, height: 230)
+                                            .offset(x: 40, y: -125)
+                                            .shadow(color: Color.white, radius: 50, x: 0, y: 50)
+                                    }
+                                Spacer()
+                            }
+                            HStack{
+                                Text("\(weather.main)")
+                                    .foregroundColor(.white)
+                                    Spacer()
+                            }
                             Spacer()
                         }
                         .offset(y: 160)
+                        Spacer()
                         
                         VStack(alignment: .leading, spacing: 5){
                             LinearGradient(colors: [Color.white, Color("FontBlue").opacity(0.9)], startPoint: .top, endPoint: .bottom)
                                 .mask(alignment: .leading){
-                                    Text("30º")
+                                    Text("\(Int(weather.temp))º")
                                         .fontWeight(.bold)
                                         .font(.system(size: 80))
                                 }
                                 .frame(width: 160, height: 90)
-                            Text("Feels like 32º")
+                            Text("Feels like \(Int(weather.feels_like))º")
                                 .foregroundColor(.white)
                                 .fontWeight(.semibold)
                             Spacer()
@@ -242,7 +232,7 @@ extension ContentView {
                         }
                         .padding(.top)
                     }
-                    .padding(.leading)
+                    .padding(.leading, 25)
                     
                     
                     HStack {
@@ -254,7 +244,7 @@ extension ContentView {
                                 .frame(width: (UIScreen.main.bounds.width * 9/10) * 1/5, height: (UIScreen.main.bounds.width * 9/10) * 1/5)
                                 .background(Color.white.opacity(0.2))
                             .cornerRadius(20)
-                            Text("32º")
+                            Text("\(Int(weather.feels_like))º")
                                 .foregroundColor(.white)
                         }
                         .padding()
@@ -266,7 +256,7 @@ extension ContentView {
                                 .frame(width: (UIScreen.main.bounds.width * 9/10) * 1/5, height: (UIScreen.main.bounds.width * 9/10) * 1/5)
                                 .background(Color.white.opacity(0.2))
                             .cornerRadius(20)
-                            Text("32º")
+                            Text("\(weather.humidity)%")
                                 .foregroundColor(.white)
                         }
                         .padding()
@@ -278,7 +268,7 @@ extension ContentView {
                                 .frame(width: (UIScreen.main.bounds.width * 9/10) * 1/5, height: (UIScreen.main.bounds.width * 9/10) * 1/5)
                                 .background(Color.white.opacity(0.2))
                             .cornerRadius(20)
-                            Text("32º")
+                            Text("\(Int(weather.speed))km/h")
                                 .foregroundColor(.white)
                         }
                         .padding()
@@ -294,14 +284,14 @@ extension ContentView {
             HStack(spacing: 20){
                 ForEach(weather, id: \.self) { w in
                     RoundedRectangle(cornerRadius: 40)
-                        .fill(.white)
+                        .fill(.white).opacity(0.2)
                         .frame(width: 80, height: 130)
                         .cornerRadius(40)
-                        .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 0)
+                        .shadow(color: .gray.opacity(0.2), radius: 10, x: 0, y: 0)
                         .overlay{
                             VStack(spacing: 5) {
                                 Text("\(getHour(w.dt_txt))")
-                                    .foregroundColor(Color.gray)
+                                    .foregroundColor(Color.white)
                                     .fontWeight(.semibold)
                                     .font(.subheadline)
                                 w.description.image2
@@ -309,7 +299,7 @@ extension ContentView {
                                    .aspectRatio(contentMode: .fit)
                                    .frame(minWidth: 30, maxWidth: 50, minHeight: 30, maxHeight: 50, alignment: .center)
                                 Text("\(Int(w.temp))º")
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(.white)
                                     .fontWeight(.bold)
                                     .font(.title3)
                             }
@@ -323,39 +313,34 @@ extension ContentView {
     }
     
     private func dailyView(_ weather: [WeatherInfoDaily]) -> some View {
-        ScrollView(.vertical, showsIndicators: false){
-            VStack{
-                ForEach(weather, id: \.self) { data in
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(.white)
-                        .frame(height: 60)
-                        .overlay(alignment: .center) {
-                            HStack(alignment: .center, spacing: 15){
-                                Text("\(getDay(data.dt))")
-                                    .foregroundColor(Color.blue)
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                data.description.image2
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(minWidth: 20, maxWidth: 30, minHeight: 20, maxHeight: 40, alignment: .center)
-                                Spacer()
-                                Text("\(Int(data.min))º")
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(Color("Font2"))
-                                Text("\(Int(data.max))º")
-                                    .foregroundColor(Color("Font"))
-                            }
-                            .padding(.horizontal)
+        VStack{
+            ForEach(weather, id: \.self) { data in
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(.white)
+                    .frame(height: 60)
+                    .overlay(alignment: .center) {
+                        HStack(alignment: .center, spacing: 15){
+                            Text("\(getDay(data.dt))")
+                                .foregroundColor(Color("Font"))
+                                .fontWeight(.semibold)
+                            Spacer()
+                            data.description.image2
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(minWidth: 20, maxWidth: 30, minHeight: 20, maxHeight: 40, alignment: .center)
+                            Spacer()
+                            Text("\(Int(data.min))º")
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color("Font2"))
+                            Text("\(Int(data.max))º")
+                                .foregroundColor(Color("Font"))
                         }
-                        
-                        .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 0)
-                    .padding(.horizontal)
-                }
+                        .padding(.horizontal)
+                    }
+                    
+                .shadow(color: .gray.opacity(0.1), radius: 5, x: 0, y: 0)
+                .padding(.horizontal)
             }
         }
     }
-    
-   
-    
 }

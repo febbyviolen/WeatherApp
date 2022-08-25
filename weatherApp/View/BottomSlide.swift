@@ -9,11 +9,9 @@ import SwiftUI
 
 struct BottomSlide: View {
     var body: some View {
-        ScrollView{
-        }
-        .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 44))
-        .frame(maxHeight: .infinity)
+        RoundedRectangle(cornerRadius: 44)
+            .fill(.white)
+            .ignoresSafeArea(edges: .bottom)
     }
 }
 

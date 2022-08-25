@@ -11,6 +11,7 @@ import SwiftUI
 struct WeatherResponseEntity: Codable {
     let list: [List]
     let city: City
+    
 }
 
 struct DailyWeatherResponseEntity: Codable {
@@ -41,7 +42,6 @@ struct List: Codable {
     let visibility: Int
     let wind: WindEntity
     let dt_txt: String
-    let country: String
 }
 
 struct WeatherEntity: Codable {
@@ -71,7 +71,7 @@ struct WeatherInfoCurrent: Identifiable{
     let dt_txt: String
     let temp: Double
     let humidity: Int
-    let pressure: Int
+    var feels_like: Double
     let speed: Double
     let description: MainDesc
     let main: String

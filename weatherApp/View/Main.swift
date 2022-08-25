@@ -13,7 +13,9 @@ struct Main: View {
             ContentView()
                 .tabItem{
                     Image(systemName: "house")
+                        .padding()
                 }
+            
             FavoriteView()
                 .tabItem{
                     Image(systemName: "heart")

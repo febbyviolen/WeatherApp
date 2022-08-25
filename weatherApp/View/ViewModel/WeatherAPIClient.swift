@@ -44,7 +44,7 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
                let mainValue = weatherValue.weather.first
             {
                 DispatchQueue.main.async { [weak self] in
-                    self?.weatherInfoCurrent = WeatherInfoCurrent (city: weatherResponse.city.name, dt_txt: weatherValue.dt_txt, temp: weatherValue.main.temp, humidity: weatherValue.main.humidity, pressure: weatherValue.main.pressure, speed: weatherValue.wind.speed,  description: MainDesc(rawValue: "\(mainValue.main)")!, main: mainValue.main, country: weatherValue.country)
+                    self?.weatherInfoCurrent = WeatherInfoCurrent (city: weatherResponse.city.name, dt_txt: weatherValue.dt_txt, temp: weatherValue.main.temp, humidity: weatherValue.main.humidity, feels_like: weatherValue.main.feels_like, speed: weatherValue.wind.speed,  description: MainDesc(rawValue: "\(mainValue.main)")!, main: mainValue.main, country: weatherResponse.city.country)
                     self?.weatherInfoHourly.removeAll()
                     for i in 0...24 {
                         self?.weatherInfoHourly.append(WeatherInfoHourly(dt_txt: weatherResponse.list[i].dt_txt, temp: weatherResponse.list[i].main.temp, description: MainDesc(rawValue: "\(weatherResponse.list[i].weather.first?.main ?? "Clear")")!))

@@ -10,5 +10,5 @@ import BottomSheet
 
 enum BottomSheetPosition: CGFloat, CaseIterable {
     case top = 0.83
-    case middle = 0.73
+    case middle = 0.46
 }
