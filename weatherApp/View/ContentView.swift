@@ -29,13 +29,6 @@ struct ContentView: View {
             ZStack {
                 VStack(alignment: .center) {
                     if let weatherInfoCurrent = weatherAPIClient.weatherInfoCurrent {
-
-//                    let weatherInfoCurrent = WeatherInfoCurrent(city: "Seoul", dt_txt: "2020-08-05 13:00:00", temp: 30.20, humidity: 30, feels_like: 32.3 , speed: 120.23, description: MainDesc(rawValue: "Clear")!, main: "apoye", country: "South Korea")
-//
-//                    let weatherInfoHourly : [WeatherInfoHourly] = [(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoHourly(dt_txt: "2020-08-05 13:00:00", temp: 10.32, description: MainDesc(rawValue: "Clear")!))]
-//
-//                    let weatherInfoDaily : [WeatherInfoDaily] = [(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)), (WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!)),(WeatherInfoDaily(dt: 1568977200, max: 30.30, min: 32.23, description: MainDesc(rawValue: "Clear")!))]
-
                     let weatherInfoHourly = weatherAPIClient.weatherInfoHourly
                     let weatherInfoDaily = weatherAPIClient.weatherInfoDaily
                     
@@ -112,7 +105,7 @@ struct ContentView: View {
                                 hasDragged = false
                             }
                         }
-//
+
                     }
 
                     }else {
