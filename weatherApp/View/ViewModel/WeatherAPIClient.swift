@@ -17,7 +17,7 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
     
     private let locationManager = CLLocationManager()
     private let dateFormatter = ISO8601DateFormatter()
-    private let apiKey = "deletedAPIKEY"
+    private let apiKey = "deleted"
     
     override init() {
         super.init()
@@ -31,7 +31,7 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
             
             return
         }
-        
+    
         guard let url = URL(string: "https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=\(apiKey)&units=metric"
         ) else {
             fatalError("Missing URL")
@@ -39,16 +39,21 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            if let weatherResponse = try? JSONDecoder().decode(WeatherResponseEntity.self, from: data),
-               let weatherValue = weatherResponse.list.first,
-               let mainValue = weatherValue.weather.first
+            if let weatherResponse = try? JSONDecoder().decode(WeatherResponseEntity.self, from: data)
             {
                 DispatchQueue.main.async { [weak self] in
-                    self?.weatherInfoCurrent = WeatherInfoCurrent (city: weatherResponse.city.name, dt_txt: weatherValue.dt_txt, temp: weatherValue.main.temp, humidity: weatherValue.main.humidity, feels_like: weatherValue.main.feels_like, speed: weatherValue.wind.speed,  description: MainDesc(rawValue: "\(mainValue.main)")!, main: mainValue.main, country: weatherResponse.city.country)
                     self?.weatherInfoHourly.removeAll()
-                    for i in 0...24 {
-                        self?.weatherInfoHourly.append(WeatherInfoHourly(dt_txt: weatherResponse.list[i].dt_txt, temp: weatherResponse.list[i].main.temp, description: MainDesc(rawValue: "\(weatherResponse.list[i].weather.first?.main ?? "Clear")")!))
+                    for j in 0...50 {
+                        if (weatherResponse.list[j].dt_txt == self!.getTodaysDate()) {
+                            self?.weatherInfoCurrent = WeatherInfoCurrent (city: weatherResponse.city.name, dt_txt: weatherResponse.list[j].dt_txt, temp: weatherResponse.list[j].main.temp, humidity: weatherResponse.list[j].main.humidity, feels_like: weatherResponse.list[j].main.feels_like, speed: weatherResponse.list[j].wind.speed,  description: MainDesc(rawValue: "\(weatherResponse.list[j].weather.first!.main)")!, main: weatherResponse.list[j].weather.first!.main, country: weatherResponse.city.country)
+                            for i in 0...24 {
+                                print(weatherResponse.list[i].dt_txt)
+                                self?.weatherInfoHourly.append(WeatherInfoHourly(dt_txt: weatherResponse.list[i+j].dt_txt, temp: weatherResponse.list[i+j].main.temp, description: MainDesc(rawValue: "\(weatherResponse.list[i+j].weather.first?.main ?? "Clear")")!))
+                            }
+                            break
+                        }
                     }
+                    
                     
                 }
             }
@@ -81,6 +86,15 @@ final class WeatherAPIClient: NSObject, ObservableObject, CLLocationManagerDeleg
         print(location.coordinate.latitude)
         print(location.coordinate.longitude)
         
+    }
+    
+    private func getTodaysDate() -> String {
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:00:00"
+       
+        print(dateFormatter.string(from: date))
+        return (dateFormatter.string(from: date))
     }
     
     private func requestLocation() {
